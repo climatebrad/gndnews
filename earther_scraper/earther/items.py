@@ -15,15 +15,21 @@ class EartherItem(scrapy.Item):
     url = scrapy.Field()
     title = scrapy.Field()
     twitter_url = scrapy.Field()
+    image = scrapy.Field()
     keywords = scrapy.Field()
     description = scrapy.Field()
     author = scrapy.Field()
     author_link = scrapy.Field()
-"""    created_millis = scrapy.Field()
-    body_imgs = scrapy.Field()
+    created_at = scrapy.Field()
     body_text = scrapy.Field()
+    body_links = scrapy.Field()
+    num_like = scrapy.Field()
     num_reply = scrapy.Field()
-    num_like = scrapy.Field()"""
+"""
+    body_imgs = scrapy.Field()
+
+    num_reply = scrapy.Field()
+    """
 #    comments = scrapy.Field()
 
 class EartherComment(scrapy.Item):

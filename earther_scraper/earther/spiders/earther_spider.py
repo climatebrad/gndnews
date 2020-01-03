@@ -1,6 +1,6 @@
 """
-Use this crawler to crawl a specified article path from gizmodo,
-    you probably want to pass the path from some other python script
+Use this crawler to crawl a specified article path from earther,
+this is for testing.
 """
 
 
@@ -22,26 +22,35 @@ class EartherSpider(scrapy.Spider):
     def parse(self, response):
         item = EartherItem()
         item['url'] = response.url
-        item['title'] = response.xpath("//title/text()").extract()[0]
-        item['twitter_url'] = response.xpath('//meta[contains(@name, "twitter:url")]/@content').extract()[0]
-        
-        keywords_ex = response.xpath('//meta[contains(@name, "keywords")]/@content').extract()
-        keywords = []
-        for k in keywords_ex:
-            k = k.split(',')
-            k = list(map(str.strip, k))
-            keywords.extend(k)
-        keywords = list(set(keywords))
+        item['title'] = response.css('title::text').get()
+        item['twitter_url'] = response.css('meta[name="twitter:url"]').attrib['content']
+        item['image']  = response.css('meta[property="og:image"]').attrib['content']
+
+        k = response.css('meta[name="keywords"]').attrib['content']
+        keywords = list(set(map(str.strip, k.split(','))))
         item['keywords'] = keywords
         
-        item['description'] = response.xpath('//meta[contains(@name, "description")]/@content').extract_first()
-        item['author'] = response.css('main .sc-1mep9y1-0').css('::text').extract()[0]
+        item['description'] = response.css('meta[name="description"]').attrib['content']
+        item['author'] = response.css('main .sc-1mep9y1-0 ::text').get()
         item['author_link'] = response.css('main .sc-1mep9y1-0 a').attrib['href']
-        yield item
- #       item['created_millis'] = response.css('.publish-time').xpath('./@data-publishtime').extract()        
-
+        item['created_at'] = response.css('main time').attrib['datetime']        
+        item['num_like']  = response.css('div[title] span::text').get()
+        item['num_reply'] = response.css('a[data-ga*="Comment count"] span::text').get()
+        
+        # body extraction
+        
+        body_ps = response.css('main .js_post-content p')
         # Extract body elements that are only text
-        # body_class = response.css('.post-content').xpath('./p/@class')
+        item['body_text'] = '\n'.join([''.join(p.css('::text').extract()) 
+            for p in body_ps])
+        # Extract links
+        body_links = []
+        for p in body_ps:
+            body_links.extend(p.css('a[data-ga*="Embedded Url"]::attr(href)').extract())
+        item['body_links'] = body_links
+        
+        yield item
+
 """
         body = response.css('.post-content').xpath('./p')
         img_idx = []
