@@ -12,13 +12,25 @@ from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.exceptions import CloseSpider
 
 global NUM_ARTICLES
-NUM_ARTICLES = 2000
+NUM_ARTICLES = 50
 
 class EartherSpider(scrapy.Spider):
 
     name = "earther"
     # allowed_domains = ["gizmodo.com", "io9.com", "foxtrotalpha.jalopnik.com"]
-    allowed_domains = ["earther.com", "earther.gizmodo.com"]
+    allowed_domains = [
+        "earther.com", 
+        "earther.gizmodo.com", 
+        "lifehacker.com", 
+        "jalopnik.com", 
+        "gizmodo.com", 
+        "i09.gizmodo.com", 
+        "paleofuture.gizmodo.com", 
+        "jezebel.com",
+        "theroot.com",
+        "thetakeout.com",
+        "deadspin.com",
+    ]
     start_urls = [
         "http://earther.gizmodo.com",
     ]
@@ -39,70 +51,49 @@ class EartherSpider(scrapy.Spider):
     # )
 
     def parse(self, response):
-        # we can't recursively call back this function, 
-        #   so we call parse_headlines() instead
-        links = response.css('.headline').xpath('./a/@href').extract()
+        links = set(response.css('a[data-ga*="stream post"]::attr(href)').extract())
         for url in links:
             yield scrapy.Request(url, callback=self.parse_article)
-        link = response.css('.load-more div.text-center a::attr(href)').extract()[0]
-        link = 'http://earther.gizmodo.com/' + link
-        yield scrapy.Request(link, callback=self.parse_headlines)
-
-    def parse_headlines(self, response):
-        # get all headlines per homepage
-        links = response.css('.headline').xpath('./a/@href').extract()
-        for url in links:
-            yield scrapy.Request(url, callback=self.parse_article)
-        link = response.css('.load-more div.text-center a::attr(href)').extract()[0]
-        link = 'http://earther.gizmodo.com/' + link
-        yield scrapy.Request(link, callback=self.parse_headlines)
+        link = response.css('a[data-ga*="More stories"]::attr(href)').get()
+        if link is not None:
+            yield response.follow(link, callback=self.parse)
 
     def parse_article(self, response):
         global NUM_ARTICLES
-        if self.crawler.stats.get_value('item_scraped_count') >= NUM_ARTICLES:
+        if self.crawler.stats.get_value('item_scraped_count') and (self.crawler.stats.get_value('item_scraped_count') >= NUM_ARTICLES):
             raise CloseSpider('Done Crawling')
 
         item = EartherItem()
         item['url'] = response.url
-        item['title'] = response.xpath("//title/text()").extract()[0].encode('ascii', 'replace')
-        item['twitter_url'] = response.xpath('//meta[contains(@name, "twitter:url")]/@content').extract()[0]
-        
-        keywords_ex = response.xpath('//meta[contains(@name, "keywords")]/@content').extract()
-        keywords = []
-        for k in keywords_ex:
-            k = k.split(',')
-            keywords.extend(k)
-        keywords = list(set(keywords))
+        item['title'] = response.css('title::text').get()
+        item['twitter_url'] = response.css('meta[name="twitter:url"]').attrib['content']
+        item['image']  = response.css('meta[property="og:image"]').attrib['content']
+
+        k = response.css('meta[name="keywords"]').attrib['content']
+        keywords = list(set(map(str.strip, k.split(','))))
         item['keywords'] = keywords
         
-        item['description'] = response.xpath('//meta[contains(@name, "description")]/@content').extract_first()
-        item['author'] = response.css('.display-name').xpath('./a/text()').extract()
-        item['author_link'] = response.css('.display-name').xpath('./a/@href').extract()[0]
-        item['created_millis'] = response.css('.publish-time').xpath('./@data-publishtime').extract()        
-
+        item['description'] = response.css('meta[name="description"]').attrib['content']
+        item['author'] = response.css('main .sc-1mep9y1-0 ::text').get()
+        item['author_link'] = response.css('main .sc-1mep9y1-0 a').attrib['href']
+        item['created_at'] = response.css('main time').attrib['datetime']        
+        item['num_like']  = response.css('div[title] span::text').get()
+        item['num_reply'] = response.css('a[data-ga*="Comment count"] span::text').get()
+        
+        # body extraction
+        
+        body_ps = response.css('main .js_post-content p')
         # Extract body elements that are only text
-        # body_class = response.css('.post-content').xpath('./p/@class')
-        body = response.css('.post-content').xpath('./p')
-        img_idx = []
-        vid_idx = []
-        text_idx = []
-        for idx, b in enumerate(body):
-            if b.re('has-image'):
-                img_idx.append(idx)
-            elif b.re('has-video'):
-                vid_idx.append(idx)
-            else:
-                text_idx.append(idx)
-        body_img = [body[i].xpath('.//img/@src').extract() for i in img_idx]
-        # body_vid = [body[i] for i in vid_idx]
-        body_text = [' '.join(body[i].xpath('.//text()').extract()) for i in text_idx]
-        item['body_imgs'] = body_img
-        item['body_text'] = body_text
+        item['body_text'] = '\n'.join([''.join(p.css('::text').extract()) 
+            for p in body_ps])
+        # Extract links
+        body_links = []
+        for p in body_ps:
+            body_links.extend(p.css('a[data-ga*="Embedded Url"]::attr(href)').extract())
+        item['body_links'] = body_links
+        
+        yield item
 
-        num_like = response.css('.js_like_count').xpath('./text()').extract()[0]
-        num_reply = response.css('.js_reply-count').xpath('./text()').extract()[0]
-        item['num_reply'] = num_reply
-        item['num_like'] = num_like
 
         # Comments
 #         comments = list()
@@ -129,8 +120,6 @@ class EartherSpider(scrapy.Spider):
 #                 comments.extend(comm)
 
 #         item['comments'] = comments
-
-        yield item
 
 #     def parse_comments(self, comments_url):
 #         """

@@ -10,7 +10,7 @@ import math
 
 from earther.items import EartherItem #, EartherComment
 
-PATH = "/exxonmobil-wishes-australia-a-happy-new-year-as-country-1840758432"
+PATH = "/smoke-from-australia-s-horrific-wildfires-as-seen-from-1840789029"
 
 class EartherSpider(scrapy.Spider):
     name = "earther"
