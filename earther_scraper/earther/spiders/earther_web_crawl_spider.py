@@ -12,7 +12,7 @@ from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.exceptions import CloseSpider
 
 global NUM_ARTICLES
-NUM_ARTICLES = 50
+NUM_ARTICLES = 10000
 
 class EartherSpider(scrapy.Spider):
 
@@ -58,6 +58,17 @@ class EartherSpider(scrapy.Spider):
         if link is not None:
             yield response.follow(link, callback=self.parse)
 
+    @staticmethod
+    def shortnum_to_numeric(num_str):
+        """Convert e.g. 2.9K to 2900, 10M to 10000000, None to 0"""
+        if not num_str:
+            return 0
+        suffices = {'K' : 1000, 'M' : 1000000 }
+        if num_str[-1] in ('K','M'):
+            (num, suffix) = (num_str[:-1], num_str[-1])
+            return int(float(num) * suffices[suffix])
+        return int(num_str)
+    
     def parse_article(self, response):
         global NUM_ARTICLES
         if self.crawler.stats.get_value('item_scraped_count') and (self.crawler.stats.get_value('item_scraped_count') >= NUM_ARTICLES):
@@ -74,11 +85,15 @@ class EartherSpider(scrapy.Spider):
         item['keywords'] = keywords
         
         item['description'] = response.css('meta[name="description"]').attrib['content']
-        item['author'] = response.css('main .sc-1mep9y1-0 ::text').get()
-        item['author_link'] = response.css('main .sc-1mep9y1-0 a').attrib['href']
+        if response.css('main .sc-1mep9y1-0 ::text').get():
+            item['author'] = response.css('main .sc-1mep9y1-0 ::text').get()
+            item['author_link'] = response.css('main .sc-1mep9y1-0 a').attrib['href']
+        else:
+            item['author'] = response.css('main .sc-1jc3ukb-2 ::text').get()
         item['created_at'] = response.css('main time').attrib['datetime']        
-        item['num_like']  = response.css('div[title] span::text').get()
-        item['num_reply'] = response.css('a[data-ga*="Comment count"] span::text').get()
+        item['num_like']  = self.shortnum_to_numeric(response.css('div[title] span::text').get())
+        item['num_reply'] = self.shortnum_to_numeric(response.css('a[data-ga*="Comment count"] span::text').get())
+            
         
         # body extraction
         

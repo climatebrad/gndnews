@@ -31,8 +31,11 @@ class EartherSpider(scrapy.Spider):
         item['keywords'] = keywords
         
         item['description'] = response.css('meta[name="description"]').attrib['content']
+        
+        # this only sometimes works
         item['author'] = response.css('main .sc-1mep9y1-0 ::text').get()
         item['author_link'] = response.css('main .sc-1mep9y1-0 a').attrib['href']
+        
         item['created_at'] = response.css('main time').attrib['datetime']        
         item['num_like']  = response.css('div[title] span::text').get()
         item['num_reply'] = response.css('a[data-ga*="Comment count"] span::text').get()

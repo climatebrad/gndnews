@@ -14,6 +14,8 @@ BOT_NAME = 'earther'
 SPIDER_MODULES = ['earther.spiders']
 NEWSPIDER_MODULE = 'earther.spiders'
 
+LOG_FILE = 'earther.log'
+LOG_ENABLED = True
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'gizmodo (+http://www.yourdomain.com)'
@@ -60,10 +62,16 @@ NEWSPIDER_MODULE = 'earther.spiders'
 #    'scrapy.extensions.closespider.CloseSpider': 2000
 # }
 
+MONGO_SERVER = "localhost"
+MONGO_PORT = 27017
+MONGO_DB = "earther"
+MONGO_COLLECTION = "articles"
+
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'earther.pipelines.JsonWriterPipeline': 300,
+#   'earther.pipelines.JsonWriterPipeline' : 300,
+   'earther.pipelines.MongoPipeline' : 500,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
