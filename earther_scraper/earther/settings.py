@@ -16,6 +16,7 @@ NEWSPIDER_MODULE = 'earther.spiders'
 
 LOG_FILE = 'earther.log'
 LOG_ENABLED = True
+LOG_LEVEL = 'ERROR'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'gizmodo (+http://www.yourdomain.com)'

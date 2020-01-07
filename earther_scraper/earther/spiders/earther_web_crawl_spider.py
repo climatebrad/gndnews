@@ -75,7 +75,12 @@ class EartherSpider(scrapy.Spider):
             raise CloseSpider('Done Crawling')
 
         item = EartherItem()
+       
+        
         item['url'] = response.url
+       
+        # content in head
+        
         item['title'] = response.css('title::text').get()
         item['twitter_url'] = response.css('meta[name="twitter:url"]').attrib['content']
         item['image']  = response.css('meta[property="og:image"]').attrib['content']
@@ -85,19 +90,28 @@ class EartherSpider(scrapy.Spider):
         item['keywords'] = keywords
         
         item['description'] = response.css('meta[name="description"]').attrib['content']
-        if response.css('main .sc-1mep9y1-0 ::text').get():
-            item['author'] = response.css('main .sc-1mep9y1-0 ::text').get()
-            item['author_link'] = response.css('main .sc-1mep9y1-0 a').attrib['href']
-        else:
-            item['author'] = response.css('main .sc-1jc3ukb-2 ::text').get()
-        item['created_at'] = response.css('main time').attrib['datetime']        
+        
+        # content in body
         item['num_like']  = self.shortnum_to_numeric(response.css('div[title] span::text').get())
         item['num_reply'] = self.shortnum_to_numeric(response.css('a[data-ga*="Comment count"] span::text').get())
-            
-        
+
+        if response.css('main').get():
+            body_text = response.css('main')[0]
+        else: 
+            body_text = response.css('.js_header + div')[0]
+        if body_text.css('.sc-1mep9y1-0 ::text').get():
+            item['author'] = body_text.css('.sc-1mep9y1-0 ::text').get()
+            item['author_link'] = body_text.css('.sc-1mep9y1-0 a').attrib['href']
+        else:
+            item['author'] = body_text.css('.sc-1jc3ukb-2 ::text').get()
+        item['created_at'] = body_text.css('time').attrib['datetime']  
+
         # body extraction
         
-        body_ps = response.css('main .js_post-content p')
+        body_ps = body_text.css('.js_post-content p')
+
+
+       
         # Extract body elements that are only text
         item['body_text'] = '\n'.join([''.join(p.css('::text').extract()) 
             for p in body_ps])
