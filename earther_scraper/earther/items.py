@@ -28,7 +28,6 @@ class EartherItem(scrapy.Item):
 """
     body_imgs = scrapy.Field()
 
-    num_reply = scrapy.Field()
     """
 #    comments = scrapy.Field()
 
