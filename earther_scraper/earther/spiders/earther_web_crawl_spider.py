@@ -17,19 +17,17 @@ NUM_ARTICLES = 10000
 class EartherSpider(scrapy.Spider):
 
     name = "earther"
-    # allowed_domains = ["gizmodo.com", "io9.com", "foxtrotalpha.jalopnik.com"]
     allowed_domains = [
         "earther.com", 
-        "earther.gizmodo.com", 
+        "gizmodo.com", 
         "lifehacker.com", 
         "jalopnik.com", 
-        "gizmodo.com", 
-        "i09.gizmodo.com", 
-        "paleofuture.gizmodo.com", 
         "jezebel.com",
         "theroot.com",
         "thetakeout.com",
         "deadspin.com",
+        "kotaku.com",
+        "theonion.com",
     ]
     start_urls = [
         "http://earther.gizmodo.com",
