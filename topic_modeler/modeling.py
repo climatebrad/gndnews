@@ -21,6 +21,7 @@ class Modeler():
         self._vectorized_keywords = None
         self._k_means = None
         self._gizmodo_stop_words = None
+        self._mongo_collection = None
         
     gizmodo_properties = {'earther' : 'environment',
                           'gizmodo' : 'general interest',
@@ -40,6 +41,14 @@ class Modeler():
     
     gizmodo_regex = re.compile('(' + '|'.join(gizmodo_properties) + ')', re.IGNORECASE)
     
+    @property
+    def mongo_collection(self):
+        if self._mongo_collection is None:
+            myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
+            mydb = myclient['items']
+            self._mongo_collection = mydb['articles']
+        return self._mongo_collection
+    
     def convert_gizmodo(self, kwd):
         """convert a keyword that includes a gizmodo property to its general category"""
         if self.gizmodo_regex.search(kwd):
@@ -51,12 +60,8 @@ class Modeler():
 
     @property 
     def articles(self):
-        """load articles into dataframe from mongodb"""
         if self._articles is None:
-            myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
-            mydb = myclient['items']
-            mycollection = mydb['articles']
-            articles = pd.DataFrame(list(mycollection.find({})))
+            articles = pd.DataFrame(list(self.mongo_collection.find({})))
             articles.created_at = pd.to_datetime(articles.created_at, infer_datetime_format=True)
             self._articles = articles
         return self._articles
@@ -126,7 +131,16 @@ class Modeler():
         return k_means
 
 
+    def _save_cluster_to_mongodb(self, _id, n_clusters, cluster_num):
+        """save cluster value for n_clusters to mongodb collection"""
+        myquery = { "_id" : _id }
+        newvalues = { "$set" : { "cluster." + str(n_clusters) : cluster_num  } }    
+        self.mongo_collection.update_one(myquery, newvalues)
+        
     def save_clusters_to_mongodb(self):
+        """save cluster column to mongodb"""
+        n_clusters = self.articles.cluster.max() + 1
+        self.articles.apply(lambda row: self._save_cluster_to_mongodb(row._id, n_clusters, row.cluster), axis=1)
         
     def display_keyword_clusters(self, n_keywords=20, ignore_gizmodo=True):
         """Return dataframe of clusters with top n_keywords in descending order. 
