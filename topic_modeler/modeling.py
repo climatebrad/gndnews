@@ -199,7 +199,7 @@ class Modeler():
         plt.yticks(())
         plt.show()
         
-    def silhouette_analysis(self, start=4, end=15, random_state=10):
+    def silhouette_analysis(self, start=4, end=15, random_state=42):
         """Prints out average silhouette score and diagrams for kmeans clusters from start to end on vectorized keywords.
         Default random_state for KMeans instance is 10."""
         range_n_clusters = range(start, end+1)
