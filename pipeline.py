@@ -3,11 +3,14 @@ import configparser
 from topic_modeler.modeling import Modeler
 
 cfg = ConfigParser()
-cfg.read('topic_modeler/settings.py')
+cfg.read('topic_modeler/settings.ini')
+
+
+# scrape earther
 
 modeler = Modeler()
 
-modeler.vectorize_keywords(vectorizer=cfg['KEYWORD_VECTORIZER_SETTINGS']['vectorizer'],
+modeler.vectorize_keywords(vectorizer=cfg['CLUSTERING']['KEYWORD_VECTORIZER_SETTINGS']['vectorizer'],
                            gizmodo=cfg['KEYWORD_VECTORIZER_SETTINGS']['gizmodo'])
 
 modeler.cluster_keywords(cfg['N_CLUSTERS'], random_state=cfg['RANDOM_STATE'])
@@ -15,5 +18,13 @@ modeler.cluster_keywords(cfg['N_CLUSTERS'], random_state=cfg['RANDOM_STATE'])
 modeler.display_keyword_clusters()
 
 modeler.save_clusters_to_mongodb()
+
+modeler.test_train_split()
+
+modeler.vectorize_articles()
+
+modeler.resample_articles()
+
+modeler.train_article_classifier()
 
 

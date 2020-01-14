@@ -25,6 +25,8 @@ class Modeler(ModelingMixin, ClusteringMixin):
         self._gizmodo_stop_words = None
         self._mongo_collection = None
         self._vectorized_articles = None
+        self._split_articles = None
+        self._classifier = None
 
     gizmodo_properties = {'earther' : 'environment',
                           'gizmodo' : 'general interest',

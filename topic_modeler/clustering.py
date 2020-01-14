@@ -60,10 +60,10 @@ class ClusteringMixin():
             raise Exception("k_means not defined. Run Modeler.cluster_keywords()")
         return self._k_means
 
-    def cluster_keywords(self, n_clusters: int, random_state=10):
+    def cluster_keywords(self, n_clusters: int, random_state=42):
         """Run K-Means clustering on vectorized keywords,
         update articles.cluster column with predictions
-        default random_state is 10."""
+        default random_state is 42."""
         k_means = KMeans(n_clusters=n_clusters, random_state=random_state)
         k_means.fit(self.vectorized_keywords)
         self.articles['cluster'] = k_means.predict(self.vectorized_keywords)
@@ -74,7 +74,8 @@ class ClusteringMixin():
     def _save_cluster_to_mongodb(self, _id, n_clusters, cluster_num):
         """save cluster value for n_clusters to mongodb collection"""
         myquery = {"_id" : _id}
-        newvalues = {"$set" : {"cluster." + str(n_clusters) : cluster_num}}
+        newvalues = {"$set" : {"clusters" : {n_clusters : cluster_num},
+                              {"cluster" : cluster_num}}
         self.mongo_collection.update_one(myquery, newvalues)
 
     def save_clusters_to_mongodb(self):
