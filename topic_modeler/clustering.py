@@ -75,7 +75,7 @@ class ClusteringMixin():
         """save cluster value for n_clusters to mongodb collection"""
         myquery = {"_id" : _id}
         newvalues = {"$set" : {"clusters" : {n_clusters : cluster_num},
-                              {"cluster" : cluster_num}}
+                               "cluster" : cluster_num} }
         self.mongo_collection.update_one(myquery, newvalues)
 
     def save_clusters_to_mongodb(self):
@@ -85,14 +85,15 @@ class ClusteringMixin():
                             self._save_cluster_to_mongodb(row._id, n_clusters, row.cluster),
                             axis=1)
 
-    def display_keyword_clusters(self, n_keywords=20, ignore_gizmodo=True):
+    def display_keyword_clusters(self, n_keywords=20, ignore_gizmodo=True, col='cluster'):
         """Return dataframe of clusters with top n_keywords in descending order.
-        if ignore_gizmode=True, don't display keywords with gizmodo properties."""
-        if 'cluster' not in self.articles:
-            raise Exception("Clusters not defined. Run Modeler.cluster_keywords(n_clusters)")
+        if ignore_gizmode=True, don't display keywords with gizmodo properties.
+        default column to display is 'cluster', can change with col="""
+        if col not in self.articles:
+            raise Exception("Clusters not defined. Run Modeler.cluster_keywords(n_clusters) or Modeler.silhouette_analysis()")
         clusters = {}
-        for i in range(self.articles.cluster.max() + 1):
-            cluster_kwds = self.articles[self.articles.cluster == i].keywords.sum()
+        for i in range(self.articles[col].max() + 1):
+            cluster_kwds = self.articles[self.articles[col] == i].keywords.sum()
             if ignore_gizmodo:
                 cluster_kwds = [kwd for kwd in cluster_kwds if kwd not in self.gizmodo_stop_words]
             clusters[i] = (pd.Series(cluster_kwds)
@@ -142,17 +143,24 @@ class ClusteringMixin():
         plt.yticks(())
         plt.show()
 
-    def silhouette_analysis(self, start=4, end=15, random_state=42):
+    def silhouette_analysis(self, start=4, end=15, vectorization='count', random_state=42):
         """Prints out average silhouette score and diagrams
         for kmeans clusters from start to end on vectorized keywords.
-        Default random_state for KMeans instance is 10."""
+        Default random_state for KMeans instance is 10.
+        If vectorization='tfidf', use polar plot"""
+        projection = None
+        if vectorization == 'tfidf':
+            projection = 'polar'
         range_n_clusters = range(start, end+1)
         X = self.vectorized_keywords
         X_2d = PCA(n_components=2).fit_transform(X)
         silhouette_avg = {}
         for n_clusters in range_n_clusters:
             # Create a subplot with 1 row and 2 columns
-            fig, (ax1, ax2) = plt.subplots(1, 2)
+            fig = plt.figure()
+            ax1 = fig.add_subplot(121)
+            ax2 = fig.add_subplot(122, projection=projection)
+
             fig.set_size_inches(18, 7)
 
             # The 1st subplot is the silhouette plot
@@ -167,7 +175,10 @@ class ClusteringMixin():
             # note random_state not set
             clusterer = KMeans(n_clusters=n_clusters, random_state=random_state)
             cluster_labels = clusterer.fit_predict(X)
-
+                     
+            # don't waste the work - save the results to our dataframe
+            if 'cluster' + str(n_clusters) not in self.articles:
+                     self.articles['cluster' + str(n_clusters)] = cluster_labels
             # The silhouette_score gives the average value for all the samples.
             # This gives a perspective into the density and separation of the formed
             # clusters

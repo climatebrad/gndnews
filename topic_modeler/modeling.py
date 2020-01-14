@@ -79,11 +79,11 @@ class ModelingMixin():
     def train_test_split(X, y, random_state=42, test_size=0.2):
         """generate train-test split"""
         split = {}
-        split['X_train'], split['X_test'], split['y_train'], split['y_test'] = 
-            train_test_split(X, y,
-                             random_state=42,
-                             stratify=y,
-                             test_size=0.2)
+        split['X_train'], split['X_test'], 
+        split['y_train'], split['y_test'] = train_test_split(X, y,
+                                                             random_state=42,
+                                                             stratify=y,
+                                                             test_size=0.2)
         return split
         
         

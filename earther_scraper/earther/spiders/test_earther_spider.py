@@ -12,7 +12,7 @@ from earther.items import EartherItem #, EartherComment
 
 PATH = "/smoke-from-australia-s-horrific-wildfires-as-seen-from-1840789029"
 
-class EartherSpider(scrapy.Spider):
+class TestEartherSpider(scrapy.Spider):
     name = "earther"
     allowed_domains = ["earther.gizmodo.com"]
     start_urls = [
