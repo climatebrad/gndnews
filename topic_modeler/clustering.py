@@ -224,6 +224,8 @@ class ClusteringMixin():
 
             # 2nd Plot showing the actual clusters formed
             colors = cm.nipy_spectral(cluster_labels.astype(float) / n_clusters)
+            if projection == 'polar':
+                X_2d[:, 0] = X_2d[:, 0] * 2 * np.pi
             ax2.scatter(X_2d[:, 0], X_2d[:, 1], marker='.', s=30, lw=0, alpha=0.7,
                         c=colors, edgecolor='k')
 
