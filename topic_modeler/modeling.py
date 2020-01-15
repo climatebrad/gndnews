@@ -22,14 +22,14 @@ from imblearn.over_sampling import SMOTE
 
 class ModelingMixin():
     """Modeling routines"""
-    
+
     @property
     def vectorized_articles(self):
         """vectorized articles"""
         if self._vectorized_articles is None:
             raise Exception("Articles have not been vectorized. Run Modeler.vectorize_articles().")
         return self._vectorized_articles
-    
+
     @property
     def split_articles(self):
         """train-test split articles"""
@@ -43,18 +43,18 @@ class ModelingMixin():
         if self._classifier is None:
             raise Exception("Classifer is not defined. Run Modeler.train_article_classifier().")
         return self._classifier  
-    
+
     @classifier.setter
     def classifier(self, model):
         self._classifier = model
-        
+
     def vectorize_articles(self, vectorizer='tfidf', split=True, **params):
         """generate vectorized tokens from article body_text. 
         vectorizer can be 'tfidf' or 'count'
         If split is true then fits on self.split_articles['X_train']"""
         if split and ((self.split_articles is None) or (self.split_articles.get('X_train') is None)):
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
-            
+
         articles_df = pd.DataFrame(self.articles.body_text.copy())
         stopwords_list = stopwords.words('english') + list(string.punctuation) + ["''", '""', '...', '``','’','“','”']
 
@@ -69,7 +69,7 @@ class ModelingMixin():
             all_vect = articleVectorizer.transform(articles_df.pop('body_text'))
         else:
             all_vect = articleVectorizer.fit_transform(articles_df.pop('body_text'))
-        
+
         for i, col in enumerate(vect.get_feature_names()):
             articles_df[col] = pd.Series(all_vect[:, i].toarray().ravel())
         self._vectorized_articles = articles_df
@@ -85,15 +85,15 @@ class ModelingMixin():
                                                              stratify=y,
                                                              test_size=0.2)
         return split
-        
-        
+
+
     def train_test_split_articles(self, random_state=42, test_size=0.2):
         """train-test-split articles"""       
         X = pd.DataFrame(self.articles.body_text)
         y = self.articles.cluster
         self._split_articles = self.test_train_split(X, y, random_state, test_size)
         return self.split_articles
-    
+
     def resample_articles(self, mode='SMOTE', random_state=42):
         """Resample articles to deal with majority class.
         mode can be SMOTE, undersample"""
@@ -122,6 +122,7 @@ class ModelingMixin():
                 'random_state' : 42,
                 'max_iter' : 1000,
                 'C' : 0.1,
+                'n_jobs' : -1,
             }
         self._classifier = LogisticRegression(**params)
         print(f"Training {classifier} classifier with params {params}...")
@@ -132,6 +133,4 @@ class ModelingMixin():
         else:
             X_train, y_train = self.split_articles['X_train'], self.split_articles['Y_train']
         self.classifier.fit(X_train, y_train)
-        
-        
         

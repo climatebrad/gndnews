@@ -30,7 +30,7 @@ modeler.display_keyword_clusters()
 
 modeler.save_clusters_to_mongodb()
 
-modeler.test_train_split()
+modeler.train_test_split_articles(random_state=json.loads(cluster_cfg['RANDOM_STATE'])
 
 modeler.vectorize_articles()
 
