@@ -18,6 +18,9 @@ pd.set_option('display.max_columns', cluster_cfg['N_CLUSTERS'])
 
 modeler.vectorize_keywords(**json.loads(cluster_cfg['KEYWORD_VECTORIZER_SETTINGS']))
 
+# optional to try to find best random state
+# modeler.try_random_random_states()
+
 modeler.silhouette_analysis(start=json.loads(cluster_cfg['N_CLUSTERS']) - 2,
                             end=json.loads(cluster_cfg['N_CLUSTERS']) + 2,
                             vectorization=json.loads(cluster_cfg['KEYWORD_VECTORIZER_SETTINGS'])['vectorizer'],

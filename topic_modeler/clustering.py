@@ -1,6 +1,7 @@
 """
 author: @climatebrad
 """
+import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -60,17 +61,31 @@ class ClusteringMixin():
             raise Exception("k_means not defined. Run Modeler.cluster_keywords()")
         return self._k_means
 
-    def cluster_keywords(self, n_clusters: int, random_state=42):
+    def cluster_keywords(self, n_clusters: int, random_state=42, n_init=20):
         """Run K-Means clustering on vectorized keywords,
         update articles.cluster column with predictions
         default random_state is 42."""
-        k_means = KMeans(n_clusters=n_clusters, random_state=random_state)
+        k_means = KMeans(n_clusters=n_clusters, n_init=n_init, n_jobs=-1, random_state=random_state)
         k_means.fit(self.vectorized_keywords)
         self.articles['cluster'] = k_means.predict(self.vectorized_keywords)
         self._k_means = k_means
         return k_means
 
 
+    def try_random_random_states(self, n_states=20, n_clusters=30):
+        """Do silhouette analysis to try to find best random state"""
+        sils = {}
+        for i in range(n_states):
+            r = random.randint(1,1000)
+            print(f"Random state={r}")
+            sils[r] = self.silhouette_analysis(
+                start=n_clusters, 
+                end=n_clusters, 
+                projection='polar', 
+                random_state=r
+            )
+        return sils
+    
     def _save_cluster_to_mongodb(self, _id, n_clusters, cluster_num):
         """save cluster value for n_clusters to mongodb collection"""
         myquery = {"_id" : _id}
@@ -143,7 +158,7 @@ class ClusteringMixin():
         plt.yticks(())
         plt.show()
 
-    def silhouette_analysis(self, start=4, end=15, projection=None, random_state=42):
+    def silhouette_analysis(self, start=4, end=15, projection=None, random_state=42, n_init=20):
         """Prints out average silhouette score and diagrams
         for kmeans clusters from start to end on vectorized keywords.
         Default random_state for KMeans instance is 10.
@@ -170,7 +185,7 @@ class ClusteringMixin():
 
             # Initialize the clusterer with n_clusters value
             # note random_state not set
-            clusterer = KMeans(n_clusters=n_clusters, random_state=random_state, n_jobs=-1)
+            clusterer = KMeans(n_clusters=n_clusters, n_init=n_init, random_state=random_state, n_jobs=-1)
             cluster_labels = clusterer.fit_predict(X)
                      
             # don't waste the work - save the results to our dataframe
