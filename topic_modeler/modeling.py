@@ -90,6 +90,7 @@ class ModelingMixin():
     def resample_articles(self, mode='SMOTE', random_state=42):
         """Resample articles to deal with majority class.
         mode can be SMOTE, undersample"""
+        # SMOTE only works if smallest classes have enough samples
         if mode == 'SMOTE':
             smote = SMOTE(random_state=random_state)
             (self.split_articles['X_train_resampled'], 
@@ -100,7 +101,8 @@ class ModelingMixin():
             (self.split_articles['X_train_resampled'], 
              self.split_articles['y_train_resampled']) = rus.fit_resample(self.split_articles['X_train'], 
                                                                         self.split_articles['y_train']) 
-        elif mode == 'oversample':
+#        elif mode == 'oversample':
+        else:
             raise Exception("mode must be 'SMOTE' or 'undersample'")
 
 
