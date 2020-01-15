@@ -74,7 +74,7 @@ class ClusteringMixin():
     def _save_cluster_to_mongodb(self, _id, n_clusters, cluster_num):
         """save cluster value for n_clusters to mongodb collection"""
         myquery = {"_id" : _id}
-        newvalues = {"$set" : {"clusters" : {n_clusters : cluster_num},
+        newvalues = {"$set" : {"clusters" : {str(n_clusters) : cluster_num},
                                "cluster" : cluster_num} }
         self.mongo_collection.update_one(myquery, newvalues)
 
@@ -143,14 +143,11 @@ class ClusteringMixin():
         plt.yticks(())
         plt.show()
 
-    def silhouette_analysis(self, start=4, end=15, vectorization='count', random_state=42):
+    def silhouette_analysis(self, start=4, end=15, projection=None, random_state=42):
         """Prints out average silhouette score and diagrams
         for kmeans clusters from start to end on vectorized keywords.
         Default random_state for KMeans instance is 10.
-        If vectorization='tfidf', use polar plot"""
-        projection = None
-        if vectorization == 'tfidf':
-            projection = 'polar'
+        If projection='polar', use polar plot"""
         range_n_clusters = range(start, end+1)
         X = self.vectorized_keywords
         X_2d = PCA(n_components=2).fit_transform(X)
@@ -173,7 +170,7 @@ class ClusteringMixin():
 
             # Initialize the clusterer with n_clusters value
             # note random_state not set
-            clusterer = KMeans(n_clusters=n_clusters, random_state=random_state)
+            clusterer = KMeans(n_clusters=n_clusters, random_state=random_state, n_jobs=-1)
             cluster_labels = clusterer.fit_predict(X)
                      
             # don't waste the work - save the results to our dataframe
