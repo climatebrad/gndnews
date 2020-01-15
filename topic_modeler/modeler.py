@@ -1,5 +1,6 @@
 import re
 import pymongo
+from configparser import ConfigParser
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -14,10 +15,12 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import silhouette_samples, silhouette_score
 from topic_modeler.clustering import ClusteringMixin
 from topic_modeler.modeling import ModelingMixin
+from topic_modeler.newsifier import NewsifierMixin
 
-class Modeler(ModelingMixin, ClusteringMixin):
+class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
     """Modeling object"""
     def __init__(self):
+        self._cfg = None
         self._articles = None
         self._keywords = None
         self._vectorized_keywords = None
@@ -27,6 +30,15 @@ class Modeler(ModelingMixin, ClusteringMixin):
         self._vectorized_articles = None
         self._split_articles = None
         self._classifier = None
+        self._cluster_names = None
+   
+    @property 
+    def cfg(self):
+        if self._cfg is None:
+            cfg = ConfigParser()
+            cfg.read('settings.ini')
+            self._cfg = cfg
+        return self._cfg
 
     gizmodo_properties = {'earther' : 'environment',
                           'gizmodo' : 'general interest',
