@@ -40,7 +40,8 @@ modeler.resample_articles()
 
 modeler.train_article_classifier()
 
-
+modeler.display_classifier_accuracy()
+                                  
 # scrape new content
 
 # classify and display somehow
