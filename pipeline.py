@@ -33,9 +33,11 @@ modeler.display_keyword_clusters()
 
 modeler.save_clusters_to_mongodb()
 
-modeler.train_test_split_articles(random_state=json.loads(cluster_cfg['RANDOM_STATE'])
+model_cfg = cfg['TOPIC_MODELING']
+                            
+modeler.train_test_split_articles(random_state=json.loads(model_cfg['RANDOM_STATE'])
 
-modeler.vectorize_articles()
+modeler.vectorize_articles(json.loads(model_cfg['ARTICLE_VECTORIZER_SETTINGS']))
 
 modeler.resample_articles()
 
