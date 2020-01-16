@@ -26,9 +26,9 @@ class ModelingMixin():
     @property
     def split_articles(self):
         """train-test split articles"""
-        if self._split_articles is None:
+        if self._splitted_articles is None:
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
-        return self._split_articles
+        return self._splitted_articles
 
     @property
     def classifier(self):
@@ -44,8 +44,8 @@ class ModelingMixin():
     def vectorize_articles(self, vectorizer='tfidf', split=True, **params):
         """generate vectorized tokens from article body_text. 
         vectorizer can be 'tfidf' or 'count'
-        If split is true then fits on self.split_articles['X_train']"""
-        if split and ((self.split_articles is None) or (self.split_articles.get('X_train') is None)):
+        If split is true then fits on self.splitted_articles['X_train']"""
+        if split and ((self.splitted_articles is None) or (self.splitted_articles.get('X_train') is None)):
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
 
         articles_df = pd.DataFrame(self.articles.body_text.copy())
@@ -57,8 +57,8 @@ class ModelingMixin():
             articleVectorizer = CountVectorizer(stop_words=stopwords_list, **params)
 
         if split:
-            self.split_articles['X_train'] = articleVectorizer.fit_transform(self.split_articles['X_train'].body_text)
-            self.split_articles['X_test'] = articleVectorizer.transform(self.split_articles['X_test'].body_text)
+            self.splitted_articles['X_train'] = articleVectorizer.fit_transform(self.splitted_articles['X_train'].body_text)
+            self.splitted_articles['X_test'] = articleVectorizer.transform(self.splitted_articles['X_test'].body_text)
             all_vect = articleVectorizer.transform(articles_df.pop('body_text'))
         else:
             all_vect = articleVectorizer.fit_transform(articles_df.pop('body_text'))
@@ -84,8 +84,8 @@ class ModelingMixin():
         """train-test-split articles"""       
         X = pd.DataFrame(self.articles.body_text)
         y = self.articles.cluster
-        self._split_articles = self.train_test_split(X, y, random_state, test_size)
-        return self.split_articles
+        self._splitted_articles = self.train_test_split(X, y, random_state, test_size)
+        return self.splitted_articles
 
     def resample_articles(self, mode='SMOTE', random_state=42):
         """Resample articles to deal with majority class.
@@ -93,14 +93,14 @@ class ModelingMixin():
         # SMOTE only works if smallest classes have enough samples
         if mode == 'SMOTE':
             smote = SMOTE(random_state=random_state)
-            (self.split_articles['X_train_resampled'], 
-             self.split_articles['y_train_resampled']) = smote.fit_sample(self.split_articles['X_train'], 
-                                                                        self.split_articles['y_train']) 
+            (self.splitted_articles['X_train_resampled'], 
+             self.splitted_articles['y_train_resampled']) = smote.fit_sample(self.splitted_articles['X_train'], 
+                                                                        self.splitted_articles['y_train']) 
         elif mode == 'undersample':
             rus = RandomUnderSampler('majority', random_state=random_state)
-            (self.split_articles['X_train_resampled'], 
-             self.split_articles['y_train_resampled']) = rus.fit_resample(self.split_articles['X_train'], 
-                                                                        self.split_articles['y_train']) 
+            (self.splitted_articles['X_train_resampled'], 
+             self.splitted_articles['y_train_resampled']) = rus.fit_resample(self.splitted_articles['X_train'], 
+                                                                        self.splitted_articles['y_train']) 
 #        elif mode == 'oversample':
         else:
             raise Exception("mode must be 'SMOTE' or 'undersample'")
@@ -122,23 +122,23 @@ class ModelingMixin():
         print(f"Training {classifier} classifier with params {params}...")
         self._classifier = LogisticRegression(**params)
         if resampled:
-            if 'X_train_resampled' not in self.split_articles:
+            if 'X_train_resampled' not in self.splitted_articles:
                 raise Exception('Resampled data does not exist. Run Modeler.resample_articles().')
-            X_train, y_train = self.split_articles['X_train_resampled'], self.split_articles['y_train_resampled']
+            X_train, y_train = self.splitted_articles['X_train_resampled'], self.splitted_articles['y_train_resampled']
         else:
-            X_train, y_train = self.split_articles['X_train'], self.split_articles['Y_train']
+            X_train, y_train = self.splitted_articles['X_train'], self.splitted_articles['Y_train']
         self.classifier.fit(X_train, y_train)
         
     def display_classifier_accuracy(self, display_train=False, target_names=None):
         """Print out accuracy and density of results.
         if display_train=True, show results for training set"""
         if display_train:
-            y_pred = self.classifier.predict(self.split_articles['X_train'])
-            y_test = self.split_articles['y_train']
+            y_pred = self.classifier.predict(self.splitted_articles['X_train'])
+            y_test = self.splitted_articles['y_train']
             which = 'Train'
         else:
-            y_pred = self.classifier.predict(self.split_articles['X_test'])
-            y_test = self.split_articles['y_test']
+            y_pred = self.classifier.predict(self.splitted_articles['X_test'])
+            y_test = self.splitted_articles['y_test']
             which = 'Test'
         accuracy = accuracy_score(y_test, y_pred)
         density = np.mean(self.classifier.coef_ != 0, axis=1) * 100
