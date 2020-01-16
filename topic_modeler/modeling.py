@@ -13,6 +13,7 @@ from sklearn.model_selection import train_test_split
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.pipeline import Pipeline
 
 class ModelingMixin():
     """Modeling routines"""
@@ -31,6 +32,13 @@ class ModelingMixin():
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
         return self._splitted_articles
 
+    @property
+    def article_vectorizer(self):
+        """vectorizer"""
+        if self._article_vectorizer is None:
+            raise Exception("Vectorizer is not defined. Run Modeler.vectorize_articles().")
+        return self._article_vectorizer
+    
     @property
     def classifier(self):
         """classifier model"""
@@ -56,7 +64,7 @@ class ModelingMixin():
             articleVectorizer = TfidfVectorizer(stop_words=stopwords_list, **params)
         else:
             articleVectorizer = CountVectorizer(stop_words=stopwords_list, **params)
-
+        
         if split:
             self.splitted_articles['X_train'] = articleVectorizer.fit_transform(self.splitted_articles['X_train'].body_text)
             self.splitted_articles['X_test'] = articleVectorizer.transform(self.splitted_articles['X_test'].body_text)
@@ -66,6 +74,7 @@ class ModelingMixin():
 
         for i, col in enumerate(articleVectorizer.get_feature_names()):
             articles_df[col] = pd.Series(all_vect[:, i].toarray().ravel())
+        self._article_vectorizer = articleVectorizer
         self._vectorized_articles = articles_df
         return articles_df
         
@@ -149,5 +158,10 @@ class ModelingMixin():
         
     def save_classifier_to_file(self, filename):
         """save to a joblib file"""
-        joblib.dump(self.classifier, filename + ".joblib.gz", compress=('gzip', 3))
+        # not sure this works
+        text_clf = Pipeline([
+            ('tfidf', self.article_vectorizer),
+            ('clf', self.classifier),
+        ])
+        joblib.dump(text_clf, filename + ".joblib.gz", compress=('gzip', 3))
         
