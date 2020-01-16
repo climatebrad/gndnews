@@ -4,6 +4,7 @@ author: @climatebrad
 import string
 import numpy as np
 import pandas as pd
+import joblib
 from nltk.corpus import stopwords
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
@@ -24,7 +25,7 @@ class ModelingMixin():
         return self._vectorized_articles
 
     @property
-    def split_articles(self):
+    def splitted_articles(self):
         """train-test split articles"""
         if self._splitted_articles is None:
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
@@ -145,3 +146,8 @@ class ModelingMixin():
         print(f'{which} accuracy: {accuracy:.4f}')
         print('%% non-zero coefficients per class:\n %s' % (density))
         print(classification_report(y_test, y_pred, target_names=target_names))
+        
+    def save_classifier_to_file(self, filename):
+        """save to a joblib file"""
+        joblib.dump(self.classifier, filename + ".joblib.gz", compress=('gzip', 3))
+        

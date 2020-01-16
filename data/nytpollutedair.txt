@@ -1,0 +1,424 @@
+SECTIONS
+SEARCH
+SKIP TO CONTENTSKIP TO SITE INDEXCLIMATE
+PLAY THE CROSSWORD
+
+Account
+See How the World’s Most Polluted
+Air Compares With Your City’s
+By Nadja Popovich, Blacki Migliozzi, Karthik Patanjali, Anjali Singhvi and Jon HuangDec. 2, 2019
+
+We visualized the damaging, tiny particles that wreak havoc on human health. From the Bay Area to New Delhi, see how the world’s worst pollution compares with your local air.
+
+AIR QUALITY BASED ON PARTICULATE POLLUTION
+12
+35
+55
+150
+250
+500 µg/m3
+1000
+The floating particles on this page depict microscopic particulate pollution called PM2.5. The number of particles you see here represents the upper limit for “good” air quality, as defined by the United States Environmental Protection Agency: 12 micrograms per cubic meter over 24 hours.
+
+We made our best guess for your location, or you can pick another.
+This is pollution in 
+Silver Spring
+ on the worst air quality day this year. Particulate concentrations reached 42 µg/m3 during the highest hour, a level that would be considered “unhealthy for sensitive groups.”
+
+Compare that to the air in California last year, when a thick blanket of smoke from the Camp Fire descended across the Bay Area. Particulate pollution hit nearly 200 µg/m3, well within the “very unhealthy” range when people are advised to limit outdoor activity.
+
+But that spike pales in comparison with the recent air quality crisis in northern India: On the most polluted day last month, fine particulate levels in New Delhi reached over 900 µg/m3, blowing past the E.P.A.’s definition of “hazardous” air (which maxes out at 500) and into extreme territory.
+
+Outdoor particulate pollution was responsible for an estimated 4.2 million deaths worldwide in 2015, with a majority concentrated in east and south Asia. Millions more fell ill from breathing dirty air.
+
+This fine pollution mainly comes from burning things: Coal in power plants, gasoline in cars, chemicals in industrial processes, or woody materials and whatever else ignites during wildfires. The particles are too small for the eye to see — each about 35 times smaller than a grain of fine beach sand — but in high concentrations they cast a haze in the sky. And, when breathed in, they wreak havoc on human health.
+
+PM2.5 can evade our bodies’ defenses, penetrating deep into the lungs and even entering the bloodstream. It has been shown to exacerbate asthma and other lung disorders, and increase the risk of heart attack and stroke. This microscopic pollution, named because each particle is smaller than 2.5 micrometers across, has also been linked to developmental problems in children and cognitive impairment in the elderly, as well as premature labor and low birth weights.
+
+Under high levels of particulate pollution, “you can’t function, you can’t thrive,” said Alexandra Karambelas, an environmental analyst and research scientist affiliated with Columbia University. “Having access to clean air is kind of a basic human right.”
+
+A Year of Fine Particulate Pollution
+
+RUSSIA
+
+CANADA
+
+UNITED
+
+STATES
+
+CHINA
+
+Atlantic
+
+Ocean
+
+Sahara
+
+Desert
+
+INDIA
+
+Pacific
+
+Ocean
+
+Pacific
+
+Ocean
+
+BRAZIL
+
+Less
+
+More
+
+AUSTRALIA
+
+Indian
+
+Ocean
+
+Source: Forecasts for daily average particulate matter (PM 2.5) concentration in micrograms per cubic meter are from the ECMWF Copernicus Atmosphere Monitoring Service.
+Developing and newly industrialized regions experience some of the worst particulate pollution today. But even high-income, developed economies, which have made big strides in reducing such pollution, continue to struggle with the quality of their air.
+
+In the United States, which has some of the cleanest air in the world, fine particulate matter still contributed to 88,000 premature deaths in 2015 — making this pollution more deadly than both diabetes and the flu. And pollution in America has worsened since 2016, reversing years of decline.
+
+Before governments can decide how best to tackle unhealthy air, Dr. Karambelas said, they need to better understand the causes of pollution. “Is it lax standards? No enforcement of the standards?” she asked. “Is something happening regionally that plays a large role?”
+
+The city-level data shown here focuses on average particulate pollution, allowing you to compare air quality across the world. But the amount of pollution you breathe also varies within a city, from neighborhood to neighborhood and block to block.
+
+And pollution does not affect all groups equally.
+
+A recent study found that in the United States, people of color tend to breathe dirtier air than white Americans, despite contributing far less to overall pollution. Around the world, the poorest suffer most from unhealthy air.
+
+Wildfires Increase Pollution in
+California and the Western U.S.
+
+DAILY AIR QUALITY BASED ON PM2.5
+
+35
+
+150
+
+250
+
+500 µg/m3
+
+Good
+
+Unhealthy
+
+Hazardous
+
+Extreme
+
+Nov
+Dec
+Jan
+Feb
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Sep
+Oct
+Nov
+0
+50
+100
+150
+200
+250 micrograms per cubic meter
+Silver Spring
+San Francisco
+Nov
+Dec
+Jan
+Feb
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Sep
+Oct
+Nov
+0
+50
+100
+150
+200
+250 micrograms per cubic meter
+Daily average
+Maximum hour
+Data reflects regional estimates by Berkeley Earth based on observations at ground-level monitoring stations.
+Last year’s deadly Camp Fire engulfed Paradise, Calif., in the Sierra Nevada foothills, causing 85 deaths and destroying nearly 19,000 buildings. Smoke from the fire blanketed much of northern California for nearly two weeks, prompting health warnings.
+
+In San Francisco, nearly 200 miles south of Paradise, fine particulate pollution reached nearly 200 micrograms per cubic meter at the worst hour, according to Berkeley Earth, a nonprofit research group that aggregates data from air-quality monitoring sites. Average daily air quality hovered between “unhealthy” and “very unhealthy” for 11 days. Schools were closed and cable car service suspended; protective face masks and air filters sold out at local stores.
+
+Further inland, Sacramento temporarily earned the unwelcome title of most polluted city in the world.
+
+Such large, high-pollution fires have become more common across the West in recent years, said Daniel Jaffe, a professor of atmospheric sciences at the University of Washington.
+
+“2018 had some of the worst ever air quality in Seattle, where I live,” he said. That year, smoke from fires in both eastern Washington and north of the border in British Columbia clouded the city’s skies for more than a week.
+
+Climate change, and the hot, dry conditions it creates, has led to more catastrophic Western fires and, with them, more air pollution. But fire hazards are also increasing because of greater development in areas abutting wildlands, the over-suppression of natural wildfires, and aging electrical infrastructure (broken power lines were identified as the cause of California’s deadly Camp Fire).
+
+Average air pollution in both Seattle and the Bay Area remains relatively low outside of large fire events, but even periodic exposure to such high levels of PM2.5 pollution can have lasting health consequences.
+
+Air Quality: A Public Health Emergency in Northern India
+
+DAILY AIR QUALITY BASED ON PM2.5
+
+35
+
+150
+
+250
+
+500 µg/m3
+
+Good
+
+Unhealthy
+
+Hazardous
+
+Extreme
+
+Nov
+Dec
+Jan
+Feb
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Sep
+Oct
+Nov
+0
+50
+100
+150
+200
+250
+300
+350
+400 micrograms per cubic meter
+Silver Spring
+New Delhi
+Nov
+Dec
+Jan
+Feb
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Sep
+Oct
+Nov
+0
+50
+100
+150
+200
+250
+300
+350
+400 micrograms per cubic meter
+Daily average
+Maximum hour
+Data reflects regional estimates by Berkeley Earth based on observations at ground-level monitoring stations.
+Last month, particulate pollution soared to apocalyptic highs in New Delhi, a city that struggles with air quality throughout the year. On the most polluted day, PM2.5 readings pushed past the limit of “hazardous” air and remained dangerously high over the following weeks.
+
+Officials declared a public health emergency, shutting down schools and distributing millions of protective face masks to residents. Hundreds of flights into and out of the city were canceled or delayed because of low visibility.
+
+In an effort to clear the hazy skies, the government temporarily halted all construction projects and restricted the number of cars on the road, requiring vehicles with odd- and even-numbered license plates to drive on alternate days. But critics said those measures only scratched the surface of the broader air quality crisis.
+
+The early winter surge in air pollution has become “depressingly predictable” over the past decade, said Joshua Apte, an air quality scientist and assistant professor at the University of Texas at Austin.
+
+Starting in late October and early November, smoke from upwind agricultural burning combines with Delhi’s year-round urban pollution — a toxic mix of vehicle exhaust, industrial emissions and construction dust — to create an eye-watering smog. Fireworks from Diwali celebrations worsen the city’s hazardous air.
+
+At the same time, cold winter air coming down the Himalayan Mountains traps pollution near the surface, creating a belt of haze that can be seen from space. Cities across Northern India, from nearby Agra all the way east to Kolkata, see similar seasonal patterns of pollution.
+
+“Extremes catch the headlines and everyone talks about it,” Dr. Apte said. “But levels of pollution across the region are very high on a normal winter day. Even when the sky appears to be blue in Delhi, pollution concentrations often exceed what we know to be healthy.”
+
+Last week, India’s Supreme Court criticized state governments for repeatedly failing to resolve the regional air pollution crisis and for ignoring the court’s previous orders to limit agricultural burning.
+
+Calling clean air and water a constitutional right, the court said the local governments should pay their citizens compensation if they fail to clean up the environment and gave authorities six weeks to respond. “Human life and health have been put in danger,” the court wrote in its order.
+
+China’s ‘War Against Air Pollution’
+
+DAILY AIR QUALITY BASED ON PM2.5
+
+35
+
+150
+
+250
+
+500 µg/m3
+
+Good
+
+Unhealthy
+
+Hazardous
+
+Extreme
+
+Nov
+Dec
+Jan
+Feb
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Sep
+Oct
+Nov
+0
+50
+100
+150
+200
+250 micrograms per cubic meter
+Silver Spring
+Beijing
+Nov
+Dec
+Jan
+Feb
+Mar
+Apr
+May
+Jun
+Jul
+Aug
+Sep
+Oct
+Nov
+0
+50
+100
+150
+200
+250 micrograms per cubic meter
+Daily average
+Maximum hour
+Data reflects regional estimates by Berkeley Earth based on observations at ground-level monitoring stations. The data is quality-controlled, but some anomalies or errors may persist.
+Beijing was once synonymous with dirty air. But in 2014, the government announced a “war against pollution,” pledging to clean up the dangerous haze hanging over many of China’s major cities.
+
+“We will resolutely declare war against pollution as we declared war against poverty,” Premier Li Keqiang announced in front of 3,000 delegates at the National People’s Congress in an address broadcast on state television.
+
+The country set strict limits on burning coal and implemented new emissions standards for power plants and heavy industry. It also banned the construction of new coal plants surrounding Beijing and other highly polluted areas and shut down some of the oldest, most polluting plants.
+
+Beijing, Shanghai and other large cities restricted the number of high-polluting vehicles on their roads and heavily subsidized electric buses.
+
+Today, air quality in Beijing has improved, though skies remain far from clear. Average daily particulate pollution hovers in the “moderate” to “unhealthy” range. The maximum hourly reading reached nearly 250 micrograms per cubic meter last November. But that’s vastly lower than the levels of pollution that were once common in the city. In 2013, Beijing recorded concentrations from 700 to 900 µg/m3 of PM2.5, not unlike the air in New Delhi last month.
+
+In 2016, a report from the environmental group Greenpeace warned that pollution controls enacted in eastern China were pushing investment in polluting industries to the west, making the air there more dangerous. Western China is also prone to large seasonal sandstorms from April through June, which contribute to unhealthy air.
+
+Last year, two cities in the west — Hotan and Kashgar, in Xinjiang province — still ranked among the most polluted in the world.
+
+Methodology
+
+The E.P.A.’s Air Quality Index is a tool for helping the public understand air pollution hazard. It is based on average daily (24-hour) pollution exposure. In the top visualization, the hourly maximum particulate levels are translated to the Air Quality Index in order to make the concentration values easier to understand. In the charts, the A.Q.I. categories are applied to daily average pollution.
+
+The data for the top visualization and bar charts comes from Berkeley Earth. Reported values are aggregated at a regional scale from thousands of surface station measurements from around the world.
+
+The map reflects satellite-derived estimates for particulate air pollution from the European Union's Earth Observation Programme, Copernicus. Air pollution is not reliably measured on the ground in many parts of the world, including much of Africa and South America. Station coverage is reflected in Berkeley Earth’s real-time air pollution map.
+
+READ 217 COMMENTS
+
+Site Index
+Go to Home Page »
+NEWS
+Home Page
+World
+U.S.
+Politics
+Election 2020
+New York
+Business
+Tech
+Science
+Sports
+Obituaries
+Today's Paper
+Corrections
+OPINION
+Today's Opinion
+Op-Ed Columnists
+Editorials
+Op-Ed Contributors
+Letters
+Sunday Review
+Video: Opinion
+ARTS
+Today's Arts
+Art & Design
+Books
+Dance
+Movies
+Music
+Pop Culture
+Television
+Theater
+Video: Arts
+LIVING
+Automobiles
+Crossword
+Education
+Food
+Health
+Jobs
+Magazine
+Parenting
+Real Estate
+Style
+T Magazine
+Travel
+Love
+MORE
+Reader Center
+Wirecutter
+Live Events
+The Learning Network
+Tools & Services
+N.Y.C. Events Guide
+Multimedia
+Photography
+Video
+Newsletters
+NYT Store
+Times Journeys
+Manage My Account
+SUBSCRIBE
+Home Delivery
+Gift Subscriptions
+Crossword
+Cooking
+Email Newsletters
+Corporate Subscriptions
+Education Rate
+Mobile Applications
+Replica Edition
+Español
+中文网
+Site Information Navigation
+© 2020 The New York Times Company
+NYTCoContact UsWork with usAdvertiseT Brand StudioYour Ad ChoicesPrivacyTerms of ServiceTerms of SaleSite MapHelpSubscriptions
