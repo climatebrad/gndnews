@@ -28,7 +28,7 @@ class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
         self._gizmodo_stop_words = None
         self._mongo_collection = None
         self._vectorized_articles = None
-        self._split_articles = None
+        self._splitted_articles = None
         self._classifier = None
         self._cluster_names = None
    
