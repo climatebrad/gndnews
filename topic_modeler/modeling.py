@@ -156,12 +156,3 @@ class ModelingMixin():
         print('%% non-zero coefficients per class:\n %s' % (density))
         print(classification_report(y_test, y_pred, target_names=target_names))
         
-    def save_classifier_to_file(self, filename):
-        """save to a joblib file"""
-        # not sure this works
-        text_clf = Pipeline([
-            ('tfidf', self.article_vectorizer),
-            ('clf', self.classifier),
-        ])
-        joblib.dump(text_clf, filename + ".joblib.gz", compress=('gzip', 3))
-        
