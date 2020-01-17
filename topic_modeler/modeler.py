@@ -19,6 +19,7 @@ from topic_modeler.newsifier import NewsifierMixin
 
 class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
     """Modeling object"""
+    # TODO - initialize with saved instance
     def __init__(self):
         self._cfg = None
         self._articles = None
@@ -32,6 +33,7 @@ class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
         self._article_vectorizer = None
         self._classifier = None
         self._cluster_names = None
+        self._text_classifier = None
    
     @property 
     def cfg(self):

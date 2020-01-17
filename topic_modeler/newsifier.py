@@ -3,6 +3,7 @@ author: @climatebrad
 """
 
 import json
+from sklearn.pipeline import Pipeline
 
 class NewsifierMixin():
     
@@ -11,6 +12,15 @@ class NewsifierMixin():
         if self._cluster_names is None:
             self._cluster_names = json.loads(self.cfg['CLUSTERING']['CLUSTER_NAMES'])
         return self._cluster_names
+    
+    @property
+    def text_classifier(self):
+        if self._text_classifier is None:
+            self._text_classifier = Pipeline([
+                ('tfidf', modeler.article_vectorizer),
+                ('clf', modeler.classifier),
+            ])
+        return self._text_classifier
     
     def top_cluster_predictions(self, vectorized_text, num=2):
         sorted_probs = {
@@ -32,5 +42,5 @@ class NewsifierMixin():
             print(self.articles.iloc[idx_or_text].title)
             vectorized_text = self.vectorized_articles[idx_or_text]
         else:
-            vectorized_text = self.vectorizer.transform(text)
+            vectorized_text = self.article_vectorizer.transform(text)
         print(self.top_cluster_predictions(vectorized_text, num))
