@@ -4,32 +4,28 @@ import configparser
 import json
 from topic_modeler.modeling import Modeler
 
-
-cfg = ConfigParser()
-cfg.read('topic_modeler/settings.ini')
-random_state=json.loads(cfg['DEFAULT']['RANDOM_STATE'])
-
 # scrape earther
 # NOTE THAT IF YOU RESCRAPE EARTHER THE TOPIC CLUSTERS WILL CHANGE!!
 
 modeler = Modeler()
-
+cfg = modeler.cfg
+random_state=cfg['DEFAULT'].getint(['RANDOM_STATE'])
 """Do Topic Clustering"""
 
 cluster_cfg = cfg['CLUSTERING']
-
-pd.set_option('display.max_columns', cluster_cfg['N_CLUSTERS'])
+n_clusters = cluster_cfg.getint('N_CLUSTERS')
+pd.set_option('display.max_columns', n_clusters)
 
 modeler.vectorize_keywords(**json.loads(cluster_cfg['KEYWORD_VECTORIZER_SETTINGS']))
 
 # optional to try to find best random state
 # modeler.try_random_random_states()
 
-modeler.silhouette_analysis(start=json.loads(cluster_cfg['N_CLUSTERS']) - 2,
-                            end=json.loads(cluster_cfg['N_CLUSTERS']) + 2,
+modeler.silhouette_analysis(start=n_clusters - 2,
+                            end=n_clusters + 2,
                             random_state=random_state)
                             
-modeler.cluster_keywords(json.loads(cluster_cfg['N_CLUSTERS']),
+modeler.cluster_keywords(n_clusters,
                          random_state=random_state)
 
 modeler.display_keyword_clusters()

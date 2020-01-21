@@ -1,4 +1,5 @@
 import re
+import os
 import pymongo
 from configparser import ConfigParser
 import numpy as np
@@ -20,7 +21,8 @@ from topic_modeler.newsifier import NewsifierMixin
 class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
     """Modeling object"""
     # TODO - initialize with saved instance
-    def __init__(self):
+    def __init__(self, settings_file='settings.ini'):
+        self._settings_file = settings_file
         self._cfg = None
         self._articles = None
         self._keywords = None
@@ -39,7 +41,7 @@ class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
     def cfg(self):
         if self._cfg is None:
             cfg = ConfigParser()
-            cfg.read('settings.ini')
+            cfg.read(self._settings_file)
             self._cfg = cfg
         return self._cfg
 
@@ -64,8 +66,14 @@ class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
     @property
     def mongo_collection(self):
         if self._mongo_collection is None:
-            myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
-            mydb = myclient['items']
+            # check if you're gcp
+            if os.environ['HOME'] == '/home/jupyter':
+                myclient = pymongo.MongoClient("mongodb+srv://dbUser:mbEBDyQyH5ltIfLf@cluster0-lqw4d.mongodb.net/test?retryWrites=true&w=majority")
+            else:
+                myclient = pymongo.MongoClient("mongodb://127.0.0.1:27017/")
+            mongo_db = self.cfg['DB'].get('MONGO_DB', 'items')
+            mydb = myclient[mongo_db]
+            mongo_collection = self.cfg['DB'].get('MONGO_COLLECTION', 'items')
             self._mongo_collection = mydb['articles']
         return self._mongo_collection
 

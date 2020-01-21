@@ -100,7 +100,7 @@ class ClusteringMixin():
                             self._save_cluster_to_mongodb(row._id, n_clusters, row.cluster),
                             axis=1)
 
-    def display_keyword_clusters(self, n_keywords=20, ignore_gizmodo=True, col='cluster'):
+    def display_keyword_clusters(self, n_keywords=20, ignore_gizmodo=True, lower=False, col='cluster'):
         """Return dataframe of clusters with top n_keywords in descending order.
         if ignore_gizmode=True, don't display keywords with gizmodo properties.
         default column to display is 'cluster', can change with col="""
@@ -111,6 +111,8 @@ class ClusteringMixin():
             cluster_kwds = self.articles[self.articles[col] == i].keywords.sum()
             if ignore_gizmodo:
                 cluster_kwds = [kwd for kwd in cluster_kwds if kwd not in self.gizmodo_stop_words]
+            if lower:
+                cluster_kwds = [kwd.lower() for kwd in cluster_kwds]
             clusters[i] = (pd.Series(cluster_kwds)
                            .value_counts()
                            .head(n_keywords)
