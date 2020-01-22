@@ -1,4 +1,5 @@
 import re
+import json
 from topic_modeler.modeler import Modeler
 
 class GizmodoModeler(Modeler):
@@ -16,6 +17,10 @@ class GizmodoModeler(Modeler):
     def drop_gizmodo_site(self, sitename):
         """Drop articles with sitename in cluster column"""
         self._articles = self.articles[self.articles.cluster != sitename]
+        
+    def rename_gizmodo_clusters(self):
+        gizmodo_domains = **json.loads(self.cfg.get('DEFAULT', 'GIZMODO_DOMAINS'))
+        
     
     
     
