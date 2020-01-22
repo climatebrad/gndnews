@@ -50,7 +50,7 @@ class ModelingMixin():
     def classifier(self, model):
         self._classifier = model
 
-    def vectorize_articles(self, vectorizer='tfidf', split=True, **params):
+    def vectorize_articles(self, vectorizer='tfidf', gizmodo='ignore', split=True, **params):
         """generate vectorized tokens from article body_text. 
         vectorizer can be 'tfidf' or 'count'
         If split is true then fits on self.splitted_articles['X_train']"""
@@ -58,12 +58,13 @@ class ModelingMixin():
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
 
         articles_df = pd.DataFrame(self.articles.body_text.copy())
-        stopwords_list = stopwords.words('english') + list(string.punctuation) + ["''", '""', '...', '``','’','“','”']
-
+        stop_words = stopwords.words('english') + list(string.punctuation) + ["''", '""', '...', '``','’','“','”']
+        if gizmodo == 'ignore':
+            stop_words.extend(self.gizmodo_sitenames)
         if vectorizer == 'tfidf':
-            articleVectorizer = TfidfVectorizer(stop_words=stopwords_list, **params)
+            articleVectorizer = TfidfVectorizer(stop_words=stop_words, **params)
         else:
-            articleVectorizer = CountVectorizer(stop_words=stopwords_list, **params)
+            articleVectorizer = CountVectorizer(stop_words=stop_words, **params)
         
         if split:
             self.splitted_articles['X_train'] = articleVectorizer.fit_transform(self.splitted_articles['X_train'].body_text)

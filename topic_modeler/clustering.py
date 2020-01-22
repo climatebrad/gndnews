@@ -27,7 +27,7 @@ class ClusteringMixin():
         additional named params passed to CountVectorizer() or TfIdfVectorizer()"""
         key_df = self.keywords.copy()
         stop_words = params.pop('stop_words', [])
-        if gizmodo == 'true':
+        if gizmodo == 'ignore':
             stop_words.extend([self.preprocess_token(k) for k in self.gizmodo_stop_words])
         elif gizmodo == 'convert':
             key_df.keywords = key_df.keywords.apply(lambda lst:

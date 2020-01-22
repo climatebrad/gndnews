@@ -13,5 +13,11 @@ class GizmodoModeler(Modeler):
     def extract_site(url):
         return re.search('((?:earther\.|io9\.)?\w+\.com)/?', url).group(1)
     
+    def drop_gizmodo_site(self, sitename):
+        """Drop articles with sitename in cluster column"""
+        self._articles = self.articles[self.articles.cluster != sitename]
+    
+    
+    
     
     

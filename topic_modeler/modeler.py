@@ -98,3 +98,7 @@ class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
             keyword_list = set(self.keywords.sum()[0])
             self._gizmodo_stop_words = list(filter(self.gizmodo_regex.search, keyword_list))
         return self._gizmodo_stop_words
+    
+    @property 
+    def gizmodo_sitenames(self):
+        return list(map(lambda x: x.strip('$'), self.gizmodo_properties))
