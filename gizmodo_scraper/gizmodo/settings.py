@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'gizmodo.spiders'
 
 LOG_FILE = 'gizmodo.log'
 LOG_ENABLED = True
-LOG_LEVEL = 'ERROR'
+LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'gizmodo (+http://www.yourdomain.com)'

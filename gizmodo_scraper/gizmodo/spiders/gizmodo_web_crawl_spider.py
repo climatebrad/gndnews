@@ -30,7 +30,8 @@ class GizmodoSpider(scrapy.Spider):
         "thetakeout.com",
         "deadspin.com",
         "kotaku.com",
-        "theonion.com"
+        "theonion.com",
+        "io9.gizmodo.com",
     ]
     start_urls = ['https://' + url for url in allowed_domains]
     
@@ -71,6 +72,8 @@ class GizmodoSpider(scrapy.Spider):
         # go to next page of links
         link = response.css('a[data-ga*="More stories"]::attr(href)').get()
         if link is not None:
+            if link[0] == '?':
+                link = '/' + link
             yield response.follow(link, callback=self.parse)
 
     @staticmethod
