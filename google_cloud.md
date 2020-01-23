@@ -35,5 +35,6 @@ Then you need to close and reopen your JupyterLab instance. Python 3.7 should be
 
 need to install packages e.g.
 ```
-pip install pandas scikit-learn joblib imbalanced-learn pymongo matplotlib nltk
+pip install pandas scikit-learn joblib imbalanced-learn pymongo matplotlib nltk dnspython
+```
 
