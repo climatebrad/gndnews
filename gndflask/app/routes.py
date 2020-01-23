@@ -1,5 +1,5 @@
 from flask import render_template
-from app import app, modeler
+from app import app
 from app.forms import TextForm
 
 
@@ -10,14 +10,14 @@ def index():
     form = TextForm()
     if form.validate_on_submit():
         results = get_results(form.text.data)
-        render_template('results.html', text=text, results=results)
+        return render_template('results.html', text=form.text.data, results=results, title='categorizer')
     return render_template('index.html', topics=topics, form=form)
 
 def get_results(text):
-    results = classifier.top_topics(text)
+    results = app.classifier.top_topics(text)
     return results
 
 @app.route('/topics/<topic>')
 def display_topic(topic):
-    
+    return render_template('topic.html', topic=topic, title=topic)
 

@@ -1,14 +1,14 @@
 from flask import Flask
 from config import Config
 from flask_bootstrap import Bootstrap
-from topic_modeler.modeler import Modeler
+from topic_modeler.classifier import Classifier
 
 app = Flask(__name__)
 app.config.from_object(Config)
 from app import routes
 
-modeler = Modeler()
-modeler.load_classifier('classifier2_0.59')
+app.classifier = Classifier()
+app.classifier.load_classifier('classifier2_0.59')
 
 bootstrap = Bootstrap(app)
 
