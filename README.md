@@ -16,17 +16,22 @@ This project is a step towards a high-quality climate news aggregator, applicabl
 * [earther_scraper/](earther_scraper/) - Earther.com webscraper
 * [gizmodo_scraper/](gizmodo_scraper/) - Gizmodo.com webscraper
 
-## Modeling
-[pipeline.py](pipeline.py) - Modeling steps
+## Climate Topic Modeling
+* [pipeline.py](pipeline.py) - Modeling steps
+* [settings.ini](settings.ini) - Modeler settings, including cluster topic names
 
 * [topic_modeler/modeler.py](topic_modeler/modeler.py) - base Modeler object
 * [topic_modeler/clustering.py](topic_modeler/clustering.py) - Topic clustering functions
 * [topic_modeler/modeling.py](topic_modeler/modeling.py) - Article text classifier functions
 * [topic_modeler/newsifier.py](topic_modeler/newsifier.py) - Presentation and deployment functions
 
-[topic_modeler/gizmodo_modeler.py](topic_modeler/gizmodo_modeler.py) - Subclass of Modeler to do Gizmodo modeling
+## General Topic Modeling
+* [topic_modeler/gizmodo_modeler.py](topic_modeler/gizmodo_modeler.py) - Subclass of Modeler to do Gizmodo modeling
+* [gizmodo.ini](gizmodo.ini) - GizmodoModeler settings
 
 ## Deployment
+* [classifier2_0.59.joblib.gz](classifier2_0.59.joblib.gz) - Pickle of trained model
+
 A Flask app using the trained model analyzes text and returns probability ratings for associated topics.
 
 Deployed at: [green-new-deal-news.herokuapp.com](https://green-new-deal-news.herokuapp.com)
