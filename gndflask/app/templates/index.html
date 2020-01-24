@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-
-{% block app_content %}
-        <h1>Green New Deal News</h1>
-        <div id="navbar">{% for topic in topics %}<a href='topics/{{ topic|replace(" ","_")|lower }}'>{{ topic }}</a> {% endfor %}</div>
-        <h2>Categorize text here</h2>
-        {% include '_textform.html' %}
-{% endblock %}
