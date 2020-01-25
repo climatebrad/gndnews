@@ -22,7 +22,7 @@ class ModelingMixin():
     def vectorized_articles(self):
         """vectorized articles"""
         if self._vectorized_articles is None:
-            raise Exception("Articles have not been vectorized. Run Modeler.vectorize_articles().")
+            raise Exception("Articles have not been vectorized. Run Modeler.vectorize_articles(namify=True).")
         return self._vectorized_articles
 
     @property
@@ -30,6 +30,14 @@ class ModelingMixin():
         """train-test split articles"""
         if self._splitted_articles is None:
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
+        return self._splitted_articles
+    
+    @property
+    def splitted_vectorized_articles(self):
+        """train-test split articles"""
+        if self._splitted_vectorized_articles is None:
+            raise Exception("""Articles have not been split and vectorized. 
+            Run Modeler.train_test_split_articles() then Modeler.vectorize_articles().""")
         return self._splitted_articles
 
     @property
@@ -50,10 +58,12 @@ class ModelingMixin():
     def classifier(self, model):
         self._classifier = model
 
-    def vectorize_articles(self, vectorizer='tfidf', gizmodo='ignore', split=True, **params):
+    # we need to use sparse arrays directly here I think.
+    def vectorize_articles(self, vectorizer='tfidf', gizmodo='ignore', split=True, namify=False, **params):
         """generate vectorized tokens from article body_text. 
         vectorizer can be 'tfidf' or 'count'
-        If split is true then fits on self.splitted_articles['X_train']"""
+        If split is true then fits on self.splitted_articles['X_train']
+        If namify is true then add vectorized words as named columns in self.vectorized_articles"""
         if split and ((self.splitted_articles is None) or (self.splitted_articles.get('X_train') is None)):
             raise Exception("Articles have not been split. Run Modeler.train_test_split_articles().")
 
@@ -67,16 +77,19 @@ class ModelingMixin():
             articleVectorizer = CountVectorizer(stop_words=stop_words, **params)
         
         if split:
-            self.splitted_articles['X_train'] = articleVectorizer.fit_transform(self.splitted_articles['X_train'].body_text)
-            self.splitted_articles['X_test'] = articleVectorizer.transform(self.splitted_articles['X_test'].body_text)
+            self._splitted_vectorized_articles = {}
+            # articleVectorizer.fit_transform returns a sparse matrix
+            self.splitted_vectorized_articles['X_train'] = articleVectorizer.fit_transform(self.splitted_articles['X_train'].body_text)
+            self.splitted_vectorized_articles['X_test'] = articleVectorizer.transform(self.splitted_articles['X_test'].body_text)
             all_vect = articleVectorizer.transform(articles_df.pop('body_text'))
         else:
             all_vect = articleVectorizer.fit_transform(articles_df.pop('body_text'))
-
-        for i, col in enumerate(articleVectorizer.get_feature_names()):
-            articles_df[col] = pd.Series(all_vect[:, i].toarray().ravel())
         self._article_vectorizer = articleVectorizer
-        self._vectorized_articles = articles_df
+        # it's possible this is too memory intensive ? 
+        if namify:
+            for i, col in enumerate(articleVectorizer.get_feature_names()):
+                articles_df[col] = pd.Series(all_vect[:, i].toarray().ravel())
+            self._vectorized_articles = articles_df
         return articles_df
         
     @staticmethod
@@ -104,13 +117,13 @@ class ModelingMixin():
         # SMOTE only works if smallest classes have enough samples
         if mode == 'SMOTE':
             smote = SMOTE(random_state=random_state)
-            (self.splitted_articles['X_train_resampled'], 
-             self.splitted_articles['y_train_resampled']) = smote.fit_sample(self.splitted_articles['X_train'], 
+            (self.splitted_vectorized_articles['X_train_resampled'], 
+             self.splitted_articles['y_train_resampled']) = smote.fit_sample(self.splitted_vectorized_articles['X_train'], 
                                                                         self.splitted_articles['y_train']) 
         elif mode == 'undersample':
             rus = RandomUnderSampler('majority', random_state=random_state)
-            (self.splitted_articles['X_train_resampled'], 
-             self.splitted_articles['y_train_resampled']) = rus.fit_resample(self.splitted_articles['X_train'], 
+            (self.splitted_vectorized_articles['X_train_resampled'], 
+             self.splitted_articles['y_train_resampled']) = rus.fit_resample(self.splitted_vectorized_articles['X_train'], 
                                                                         self.splitted_articles['y_train']) 
 #        elif mode == 'oversample':
         else:
@@ -133,22 +146,22 @@ class ModelingMixin():
         print(f"Training {classifier} classifier with params {params}...")
         self._classifier = LogisticRegression(**params)
         if resampled:
-            if 'X_train_resampled' not in self.splitted_articles:
+            if 'X_train_resampled' not in self.splitted_vectorized_articles:
                 raise Exception('Resampled data does not exist. Run Modeler.resample_articles().')
-            X_train, y_train = self.splitted_articles['X_train_resampled'], self.splitted_articles['y_train_resampled']
+            X_train, y_train = self.splitted_vectorized_articles['X_train_resampled'], self.splitted_articles['y_train_resampled']
         else:
-            X_train, y_train = self.splitted_articles['X_train'], self.splitted_articles['Y_train']
+            X_train, y_train = self.splitted_vectorized_articles['X_train'], self.splitted_articles['Y_train']
         self.classifier.fit(X_train, y_train)
         
     def display_classifier_accuracy(self, display_train=False, target_names=None):
         """Print out accuracy and density of results.
         if display_train=True, show results for training set"""
         if display_train:
-            y_pred = self.classifier.predict(self.splitted_articles['X_train'])
+            y_pred = self.classifier.predict(self.splitted_vectorized_articles['X_train'])
             y_test = self.splitted_articles['y_train']
             which = 'Train'
         else:
-            y_pred = self.classifier.predict(self.splitted_articles['X_test'])
+            y_pred = self.classifier.predict(self.splitted_vectorized_articles['X_test'])
             y_test = self.splitted_articles['y_test']
             which = 'Test'
         accuracy = accuracy_score(y_test, y_pred)

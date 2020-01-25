@@ -19,7 +19,7 @@ class GizmodoModeler(Modeler):
         self._articles = self.articles[self.articles.cluster != sitename]
         
     def rename_gizmodo_clusters(self):
-        gizmodo_domains = **json.loads(self.cfg.get('DEFAULT', 'GIZMODO_DOMAINS'))
+        gizmodo_domains = json.loads(self.cfg.get('DEFAULT', 'GIZMODO_DOMAINS'))
         
     
     

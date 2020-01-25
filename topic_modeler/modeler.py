@@ -32,6 +32,7 @@ class Modeler(NewsifierMixin, ModelingMixin, ClusteringMixin):
         self._mongo_collection = None
         self._vectorized_articles = None
         self._splitted_articles = None
+        self._splitted_vectorized_articles = None
         self._article_vectorizer = None
         self._classifier = None
         self._cluster_names = None
