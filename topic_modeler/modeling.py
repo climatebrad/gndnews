@@ -9,6 +9,8 @@ from nltk.corpus import stopwords
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC 
 from sklearn.model_selection import train_test_split
 from imblearn.under_sampling import RandomUnderSampler
 from imblearn.over_sampling import SMOTE
@@ -75,7 +77,7 @@ class ModelingMixin():
             articleVectorizer = TfidfVectorizer(stop_words=stop_words, **params)
         else:
             articleVectorizer = CountVectorizer(stop_words=stop_words, **params)
-        
+        print("Vectorizing articles...")
         if split:
             self._splitted_vectorized_articles = {}
             # articleVectorizer.fit_transform returns a sparse matrix
@@ -133,26 +135,50 @@ class ModelingMixin():
     def train_article_classifier(self, classifier='LogisticRegression', resampled=True, **params):
         """Fit classifier to training articles.
         Fit to resampled training data if resampled=True"""
-        default_params = {
-            'solver' : 'saga',
-            'multi_class' : 'multinomial',
-            'penalty' : 'l1',
-            'random_state' : 42,
-            'max_iter' : 1000,
-            'C' : 0.1,
-            'n_jobs' : -1,
-        }
+        if classifier == 'LogisticRegression':
+            default_params = {
+                'solver' : 'saga',
+                'multi_class' : 'multinomial',
+                'penalty' : 'l1',
+                'random_state' : 42,
+                'max_iter' : 1000,
+                'C' : 0.1,
+                'n_jobs' : -1,
+            }
+        if classifier == 'DecisionTreeClassifier':
+            default_params = {
+                'random_state' : 42,
+                'max_depth' : 2,
+                'criterion' : 'gini',
+                'splitter' : 'best',
+                'min_samples_split' : 2,
+                'min_samples_leaf' : 1,
+                'max_features': None,
+                'class_weight': None,
+                'ccp_alpha': 0,
+            }
+        if classifier == 'SVC':
+            default_params = {
+                'kernel': 'linear',
+                'C': 1,
+            }
         params = {key : params.get(key, value) for key, value in default_params.items()}  
         print(f"Training {classifier} classifier with params {params}...")
-        self._classifier = LogisticRegression(**params)
+        if classifier == 'LogisticRegression':
+            self._classifier = LogisticRegression(**params)
+        elif classifier == 'DecisionTreeClassifier':
+            self._classifier = DecisionTreeClassifier(**params)
         if resampled:
             if 'X_train_resampled' not in self.splitted_vectorized_articles:
                 raise Exception('Resampled data does not exist. Run Modeler.resample_articles().')
             X_train, y_train = self.splitted_vectorized_articles['X_train_resampled'], self.splitted_articles['y_train_resampled']
         else:
-            X_train, y_train = self.splitted_vectorized_articles['X_train'], self.splitted_articles['Y_train']
+            X_train, y_train = self.splitted_vectorized_articles['X_train'], self.splitted_articles['y_train']
         self.classifier.fit(X_train, y_train)
         
+# may want to implement tuning
+# https://optunity.readthedocs.io/en/latest/
+
     def display_classifier_accuracy(self, display_train=False, target_names=None):
         """Print out accuracy and density of results.
         if display_train=True, show results for training set"""

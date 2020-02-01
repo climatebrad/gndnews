@@ -21,6 +21,9 @@ class GizmodoModeler(Modeler):
     def rename_gizmodo_clusters(self):
         gizmodo_domains = json.loads(self.cfg.get('DEFAULT', 'GIZMODO_DOMAINS'))
         
+    def is_crossposted(self, article):
+        self.gizmodo_stop_words
+        
     
     
     
